@@ -13,26 +13,38 @@ class PaymentController extends Controller
 {
     public function store(Request $request, Debt $debt)
     {
+        if ($debt->is_paid) {
+            return back()->withErrors('Debt already paid');
+        }
+
+        $installmentAmount = $debt->amount / $debt->installment_count;
+
         $gateway = GatewayFactory::make();
-        $result = $gateway->charge($debt->amount, [
-            'description' => 'Debt #' . $debt->id,
+        $result = $gateway->charge($installmentAmount, [
+            'description' => 'Debt #' . $debt->id . ' installment',
         ]);
 
         if ($result['status'] !== 'succeeded' && $result['status'] !== 'success') {
             return back()->withErrors('Payment failed');
         }
 
+        $installmentNo = $debt->installments_paid + 1;
+
         $payment = Payment::create([
             'student_id' => $debt->student_id,
             'debt_id' => $debt->id,
-            'amount_paid' => $debt->amount,
+            'amount_paid' => $installmentAmount,
+            'installment_no' => $installmentNo,
             'transaction_id' => $result['transaction_id'],
             'payment_gateway' => env('PAYMENT_GATEWAY', 'dummy'),
             'status' => 'success',
             'paid_at' => now(),
         ]);
 
-        $debt->update(['is_paid' => true]);
+        $debt->increment('installments_paid');
+        if ($debt->installments_paid >= $debt->installment_count) {
+            $debt->update(['is_paid' => true]);
+        }
 
         $invoice = Invoice::create([
             'payment_id' => $payment->id,

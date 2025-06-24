@@ -65,6 +65,8 @@ Laravel SnappyPDF veya DomPDF kullanılabilir
 5. 🧾 Borç Tanımlama ve Takip
 Admin panelinden dönemsel borç tanımı
 
+Borç eklerken taksit sayısı belirlenebilir
+
 Belirli öğrenciye / gruba borç ekleme
 
 Son ödeme tarihi, gecikme faizi (opsiyonel)
@@ -116,6 +118,8 @@ debts
 - student_id (FK)
 - type (harç, sınav vs)
 - amount
+- installment_count
+- installments_paid
 - due_date
 - is_paid
 - created_at
@@ -125,6 +129,7 @@ payments
 - student_id (FK)
 - debt_id (FK)
 - amount_paid
+- installment_no
 - transaction_id
 - payment_gateway (iyzico, stripe)
 - status (success, failed)
@@ -194,4 +199,9 @@ Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe` ya da `dummy` olarak
 Active Directory baglantisi icin `.env` dosyaniza `AD_HOST`, `AD_BASE_DN`, `AD_USERNAME` ve `AD_PASSWORD` degiskenlerini ekleyin. Sistem, kullanici bilgilerini otomatik olarak Active Directory'den cekebilir.
 
 Logo muhasebe entegrasyonu icin `LOGO_API_URL`, `LOGO_CLIENT_ID` ve `LOGO_CLIENT_SECRET` ayarlarinin doldurulmasi gerekir. Basarili odemeler sonrasinda olusan makbuz bilgileri bu API'ye otomatik gonderilir.
+
+## Operasyon
+1. `php artisan migrate --force` komutunu kullanarak veritabani tablolarini olusturun.
+2. Faturalarin uretilmesi ve Logo'ya gonderilmesi icin queue calistirmak gerekiyorsa `php artisan queue:work` komutunu arkaplanda calistirin.
+3. Tum odemeler yapildiktan hemen sonra Logo'ya ve fatura olusturma servisine gonderilir. Gerekiyorsa HTTP erisim izinlerini kontrol edin.
 

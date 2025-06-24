@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
             $table->foreignId('debt_id')->constrained()->onDelete('cascade');
             $table->decimal('amount_paid', 10, 2);
+            $table->integer('installment_no')->default(1);
             $table->string('transaction_id');
             $table->string('payment_gateway');
             $table->string('status');

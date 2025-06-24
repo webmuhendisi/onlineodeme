@@ -24,6 +24,7 @@ class DebtController extends Controller
         $validated = $request->validate([
             'type' => 'required',
             'amount' => 'required|numeric',
+            'installment_count' => 'required|integer|min:1',
             'due_date' => 'required|date'
         ]);
 

@@ -12,6 +12,8 @@ class Debt extends Model
         'student_id',
         'type',
         'amount',
+        'installment_count',
+        'installments_paid',
         'due_date',
         'is_paid'
     ];
@@ -26,8 +28,8 @@ class Debt extends Model
         return $this->belongsTo(Student::class);
     }
 
-    public function payment()
+    public function payments()
     {
-        return $this->hasOne(Payment::class);
+        return $this->hasMany(Payment::class);
     }
 }

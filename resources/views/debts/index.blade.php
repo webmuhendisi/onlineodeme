@@ -10,6 +10,7 @@
                 <th>Tip</th>
                 <th>Tutar</th>
                 <th>Son Ödeme</th>
+                <th>Taksit</th>
                 <th>Durum</th>
                 <th></th>
             </tr>
@@ -20,6 +21,7 @@
                 <td>{{ $debt->type }}</td>
                 <td>{{ $debt->amount }}</td>
                 <td>{{ $debt->due_date->format('Y-m-d') }}</td>
+                <td>{{ $debt->installments_paid }} / {{ $debt->installment_count }}</td>
                 <td>{{ $debt->is_paid ? 'Ödendi' : 'Bekleniyor' }}</td>
                 <td>
                     @if(!$debt->is_paid)

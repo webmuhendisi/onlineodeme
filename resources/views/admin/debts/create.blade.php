@@ -14,6 +14,10 @@
             <input type="number" step="0.01" name="amount" class="form-control" required>
         </div>
         <div class="mb-3">
+            <label>Taksit Sayısı</label>
+            <input type="number" name="installment_count" value="1" min="1" class="form-control" required>
+        </div>
+        <div class="mb-3">
             <label>Son Ödeme Tarihi</label>
             <input type="date" name="due_date" class="form-control" required>
         </div>
