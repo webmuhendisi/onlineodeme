@@ -6,6 +6,7 @@ use App\Models\Debt;
 use App\Models\Invoice;
 use App\Services\PaymentGateways\GatewayFactory;
 use App\Services\InvoiceService;
+use App\Services\LogoAccountingService;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -42,6 +43,10 @@ class PaymentController extends Controller
         $invoiceService = new InvoiceService();
         $invoicePath = $invoiceService->generate($payment);
         $invoice->update(['pdf_path' => $invoicePath]);
+
+        $payment->load('invoice');
+        $logo = new LogoAccountingService();
+        $logo->sendPayment($payment);
 
         return redirect()->route('invoices.show', $invoice)->with('status', 'Payment successful');
     }

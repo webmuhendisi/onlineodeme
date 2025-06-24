@@ -5,6 +5,7 @@ use App\Models\Student;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Services\ActiveDirectoryService;
 
 class StudentController extends Controller
 {
@@ -30,6 +31,16 @@ class StudentController extends Controller
             'class' => 'required',
             'phone' => 'nullable'
         ]);
+
+        $ad = new ActiveDirectoryService();
+        $ad->connect();
+        $adData = $ad->fetchUser($validated['student_number']);
+        if (!empty($adData['mail'][0])) {
+            $validated['email'] = $adData['mail'][0];
+        }
+        if (!empty($adData['displayname'][0])) {
+            $validated['name'] = $adData['displayname'][0];
+        }
 
         $user = User::create([
             'name' => $validated['name'],
@@ -93,3 +104,4 @@ class StudentController extends Controller
         return redirect()->route('students.index')->with('status', 'Student deleted');
     }
 }
+
