@@ -187,3 +187,5 @@ Admin borç silme işlemi -> loglanması
 
 Bu proje ornek ve iskelet niteligindedir. Tum ozelliklerin gercek ortam icin gelistirilmesi gerekmektedir.
 Production icin `.env` dosyanizda `APP_ENV=production` ve `APP_DEBUG=false` degerlerini kullanin. `storage` klasorunun yazilabilir oldugundan emin olun ve `php artisan storage:link` komutunu calistirin.
+
+Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe` ya da `dummy` olarak ayarlayin. Stripe kullanacaksaniz `STRIPE_SECRET` ve `STRIPE_KEY` degerlerini tanimlayin. Faturalar DomPDF ile `storage/invoices` klasorune PDF olarak olusur.
