@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 
 class LoginController extends Controller
 {
@@ -17,6 +18,12 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $key = 'login:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors(['email' => 'Cok fazla deneme. Lütfen ' . $seconds . ' saniye sonra tekrar deneyin.']);
+        }
+
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -25,8 +32,11 @@ class LoginController extends Controller
         $ad = new ActiveDirectoryService();
         $userData = $ad->authenticate($credentials['email'], $credentials['password']);
         if (!$userData) {
+            RateLimiter::hit($key, 60);
             return back()->withErrors(['email' => 'Giris basarisiz']);
         }
+
+        RateLimiter::clear($key);
 
         $user = User::updateOrCreate(
             ['email' => $credentials['email']],

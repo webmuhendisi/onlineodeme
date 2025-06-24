@@ -209,3 +209,8 @@ Bu degiskenleri veritabaninda saklayabilir ve yönetim panelindeki **Sistem Ayar
 2. Faturalarin uretilmesi ve Logo'ya gonderilmesi icin queue calistirmak gerekiyorsa `php artisan queue:work` komutunu arkaplanda calistirin.
 3. Tum odemeler yapildiktan hemen sonra Logo'ya ve fatura olusturma servisine gonderilir. Gerekiyorsa HTTP erisim izinlerini kontrol edin.
 
+## Guvenlik
+* Giris denemeleri IP basina 5 kez ile sinirlandirilmistir.
+* Tüm yonetim sayfalari sadece "admin" rolune sahip kullanicilar tarafindan erisilebilir.
+* Olusturulan faturalar `storage/app/invoices` dizininde saklanir ve dogrudan web uzerinden erisilemez.
+

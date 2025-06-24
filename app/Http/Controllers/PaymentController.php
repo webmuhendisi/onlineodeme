@@ -8,11 +8,16 @@ use App\Services\PaymentGateways\GatewayFactory;
 use App\Services\InvoiceService;
 use App\Services\LogoAccountingService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
     public function store(Request $request, Debt $debt)
     {
+        $this->requireAuth();
+        if (Auth::user()->role !== 'admin' && Auth::id() !== $debt->student->user_id) {
+            abort(403);
+        }
         if ($debt->is_paid) {
             return back()->withErrors('Debt already paid');
         }
@@ -59,8 +64,8 @@ class PaymentController extends Controller
         ]);
 
         $invoiceService = new InvoiceService();
-        $invoicePath = $invoiceService->generate($payment);
-        $invoice->update(['pdf_path' => $invoicePath]);
+        $relativePath = $invoiceService->generate($payment);
+        $invoice->update(['pdf_path' => $relativePath]);
 
         $payment->load('invoice');
         $logo = new LogoAccountingService();

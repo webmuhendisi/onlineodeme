@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Dompdf\Dompdf;
 use App\Models\Payment;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceService
 {
@@ -12,8 +13,8 @@ class InvoiceService
         $html = view('invoices.show', ['invoice' => $payment->invoice])->render();
         $dompdf->loadHtml($html);
         $dompdf->render();
-        $fileName = 'storage/invoices/' . uniqid('inv_') . '.pdf';
-        file_put_contents($fileName, $dompdf->output());
-        return $fileName;
+        $path = 'invoices/' . uniqid('inv_') . '.pdf';
+        Storage::put($path, $dompdf->output());
+        return $path;
     }
 }
