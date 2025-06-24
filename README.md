@@ -1,4 +1,5 @@
 🎓 Üniversite Online Ödeme Sistemi - Teknik Dokümantasyon
+Bu depo, README'de belirtilen ozelliklere sahip Laravel tabanli online odeme sisteminin iskelet kodlarini icerir.
 🧩 Teknoloji Yığını
 Backend Framework: Laravel 10.x
 
@@ -13,6 +14,7 @@ Authentication: Laravel Breeze / Jetstream
 Frontend Kütüphaneler: Bootstrap 5, FontAwesome, Alpine.js
 
 Admin Panel: Custom Blade
+Tüm arayüzler Bootstrap CDN üzerinden modern bir görünümle sunulur. Yönetim paneline `/admin` adresinden erişebilirsiniz.
 
 🎯 Amaç
 Öğrencilerin dönemlik harç, sınav, yurt, yemek veya diğer hizmet ücretlerini online olarak görüntüleyip ödemelerini sağlayan bir sistem oluşturmak.
@@ -176,3 +178,15 @@ Geçersiz kart -> hata mesajı
 Geç kalan ödeme -> uyarı sistemi
 
 Admin borç silme işlemi -> loglanması
+
+## Kurulum
+1. Depoyu klonlayin ve `composer install` komutunu calistirin.
+2. `.env` dosyasini olusturmak icin `.env.example` kopyalayin.
+3. `php artisan key:generate` komutunu calistirin.
+4. Veritabani bilgilerini .env dosyasina girin ve `php artisan migrate` komutu ile tablolari olusturun.
+5. Gelistirme sunucusunu baslatmak icin `php artisan serve` komutunu kullanin.
+
+Bu proje ornek ve iskelet niteligindedir. Tum ozelliklerin gercek ortam icin gelistirilmesi gerekmektedir.
+Production icin `.env` dosyanizda `APP_ENV=production` ve `APP_DEBUG=false` degerlerini kullanin. `storage` klasorunun yazilabilir oldugundan emin olun ve `php artisan storage:link` komutunu calistirin.
+
+Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe` ya da `dummy` olarak ayarlayin. Stripe kullanacaksaniz `STRIPE_SECRET` ve `STRIPE_KEY` degerlerini tanimlayin. Faturalar DomPDF ile `storage/invoices` klasorune PDF olarak olusur.
