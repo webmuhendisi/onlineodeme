@@ -17,11 +17,16 @@ class PaymentController extends Controller
             return back()->withErrors('Debt already paid');
         }
 
-        $installmentAmount = $debt->amount / $debt->installment_count;
+        $request->validate([
+            'currency' => 'in:TRY,USD,EUR,GBP'
+        ]);
 
+        $installmentAmount = $debt->amount / $debt->installment_count;
+        
         $gateway = GatewayFactory::make();
         $result = $gateway->charge($installmentAmount, [
             'description' => 'Debt #' . $debt->id . ' installment',
+            'currency' => $request->input('currency', 'TRY'),
         ]);
 
         if ($result['status'] !== 'succeeded' && $result['status'] !== 'success') {
@@ -35,6 +40,7 @@ class PaymentController extends Controller
             'debt_id' => $debt->id,
             'amount_paid' => $installmentAmount,
             'installment_no' => $installmentNo,
+            'currency' => $request->input('currency', 'TRY'),
             'transaction_id' => $result['transaction_id'],
             'payment_gateway' => env('PAYMENT_GATEWAY', 'dummy'),
             'status' => 'success',

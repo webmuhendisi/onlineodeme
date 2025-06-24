@@ -13,6 +13,7 @@ class Payment extends Model
         'debt_id',
         'amount_paid',
         'transaction_id',
+        'currency',
         'payment_gateway',
         'installment_no',
         'status',

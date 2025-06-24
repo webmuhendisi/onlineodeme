@@ -194,7 +194,7 @@ Admin borç silme işlemi -> loglanması
 Bu proje ornek ve iskelet niteligindedir. Tum ozelliklerin gercek ortam icin gelistirilmesi gerekmektedir.
 Production icin `.env` dosyanizda `APP_ENV=production` ve `APP_DEBUG=false` degerlerini kullanin. `storage` klasorunun yazilabilir oldugundan emin olun ve `php artisan storage:link` komutunu calistirin.
 
-Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe` ya da `dummy` olarak ayarlayin. Stripe kullanacaksaniz `STRIPE_SECRET` ve `STRIPE_KEY` degerlerini tanimlayin. Faturalar DomPDF ile `storage/invoices` klasorune PDF olarak olusur.
+Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe`, `isbank` veya `dummy` olarak belirleyin. Stripe icin `STRIPE_SECRET`/`STRIPE_KEY`, Isbank icin `ISBANK_API_URL`, `ISBANK_CLIENT_ID` ve `ISBANK_CLIENT_SECRET` degerlerini doldurun. Faturalar DomPDF ile `storage/invoices` klasorune PDF olarak olusur. Tum odemelerde TL, USD, EUR ve GBP para birimleri secilebilir.
 
 Active Directory baglantisi icin `.env` dosyaniza `AD_HOST`, `AD_BASE_DN`, `AD_USERNAME` ve `AD_PASSWORD` degiskenlerini ekleyin. Sistem, kullanici bilgilerini otomatik olarak Active Directory'den cekebilir.
 

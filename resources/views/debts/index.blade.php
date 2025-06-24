@@ -27,6 +27,12 @@
                     @if(!$debt->is_paid)
                     <form method="POST" action="{{ route('debts.pay', $debt) }}" class="d-inline">
                         @csrf
+                        <select name="currency" class="form-select form-select-sm d-inline w-auto">
+                            <option value="TRY">TL</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                        </select>
                         <button class="btn btn-success btn-sm">Öde</button>
                     </form>
                     @endif
