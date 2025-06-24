@@ -9,6 +9,15 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Anasayfa</a>
         <a class="nav-link" href="{{ url('/admin') }}">Admin</a>
+        @auth
+            <span class="ms-2">{{ auth()->user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                @csrf
+                <button class="btn btn-link">Cikis</button>
+            </form>
+        @else
+            <a class="nav-link" href="{{ route('login') }}">Giris</a>
+        @endauth
     </div>
 </nav>
 <div class="py-4">

@@ -34,5 +34,27 @@ class ActiveDirectoryService
         $entries = ldap_get_entries($this->connection, $result);
         return $entries[0] ?? [];
     }
+
+    public function authenticate(string $email, string $password): ?array
+    {
+        $this->connect();
+        if (!$this->connection) {
+            return null;
+        }
+
+        $baseDn = Setting::getValue('AD_BASE_DN', env('AD_BASE_DN'));
+        $result = ldap_search($this->connection, $baseDn, sprintf('(mail=%s)', ldap_escape($email, '', LDAP_ESCAPE_FILTER)));
+        $entries = ldap_get_entries($this->connection, $result);
+        if (empty($entries[0]['dn'])) {
+            return null;
+        }
+
+        $dn = $entries[0]['dn'];
+        if (@ldap_bind($this->connection, $dn, $password)) {
+            return $entries[0];
+        }
+
+        return null;
+    }
 }
 
