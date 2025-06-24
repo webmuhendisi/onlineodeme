@@ -1,1 +1,178 @@
-# onlineodeme
+🎓 Üniversite Online Ödeme Sistemi - Teknik Dokümantasyon
+🧩 Teknoloji Yığını
+Backend Framework: Laravel 10.x
+
+Frontend Template Engine: Blade
+
+Veritabanı: MySQL 8+
+
+Authentication: Laravel Breeze / Jetstream
+
+Ödeme Entegrasyonu: Iyzico / Stripe / PayTR (test modunda başlanabilir)
+
+Frontend Kütüphaneler: Bootstrap 5, FontAwesome, Alpine.js
+
+Admin Panel: Custom Blade
+
+🎯 Amaç
+Öğrencilerin dönemlik harç, sınav, yurt, yemek veya diğer hizmet ücretlerini online olarak görüntüleyip ödemelerini sağlayan bir sistem oluşturmak.
+
+📂 Modüller
+1. 🔐 Kimlik Doğrulama Sistemi
+Öğrenci ve yönetici için oturum açma / kayıt olma
+
+Öğrenci e-posta doğrulama
+
+Şifre sıfırlama
+
+2FA opsiyonel
+
+2. 👤 Kullanıcı Rolleri
+Admin: Tüm kontrol ve raporlama
+
+Birim Yetkilisi: Kendi departman ödemelerini yönetir
+
+Öğrenci: Kendi borç ve ödeme geçmişini görür
+
+3. 💳 Ödeme İşlemleri
+Genel Özellikler:
+Laravel Cashier veya manuel ödeme gateway API kullanımı
+
+Borç seçme → ödeme → sonuç ekranı (3D Secure destekli)
+
+Başarılı ödeme sonrası makbuz oluşturulması (PDF)
+
+Taksit desteği (opsiyonel)
+
+Ödeme Tipleri:
+Dönemlik Harç Ücreti
+
+Yurt / Konaklama Ücreti
+
+Sınav Ücreti
+
+Öğrenci Belgesi / Transkript Ücretleri
+
+4. 📜 Fatura & Makbuz Yönetimi
+PDF olarak indirilebilen resmi ödeme makbuzu
+
+Fatura numarası, ödeme ID, tarih bilgileri
+
+Laravel SnappyPDF veya DomPDF kullanılabilir
+
+5. 🧾 Borç Tanımlama ve Takip
+Admin panelinden dönemsel borç tanımı
+
+Belirli öğrenciye / gruba borç ekleme
+
+Son ödeme tarihi, gecikme faizi (opsiyonel)
+
+Otomatik borçlandırma (dönem başında tetiklenebilir)
+
+6. 📈 Raporlama Paneli (Yönetici)
+Günlük / aylık / yıllık gelir raporu
+
+Borçlu öğrenciler listesi
+
+Ödeme başarı / başarısızlık istatistikleri
+
+Excel / CSV dışa aktarma desteği
+
+7. 📬 Bildirim Sistemi
+Ödeme başarı e-postası (öğrenciye)
+
+Borç hatırlatma bildirimi (e-posta / SMS)
+
+Yöneticiye yüksek tutarlı ödeme bildirimi
+
+8. 📱 Mobil Uyumlu Arayüz (Responsive)
+Blade + Bootstrap ile tüm ekran boyutlarına uyumlu
+
+Mobil ödeme kolaylığı
+
+🔧 Veritabanı Tasarımı (Özet)
+sql
+Kopyala
+Düzenle
+users
+- id
+- name
+- email
+- role (admin, staff, student)
+- password
+
+students
+- id
+- user_id (FK)
+- student_number
+- department
+- class
+- phone
+
+debts
+- id
+- student_id (FK)
+- type (harç, sınav vs)
+- amount
+- due_date
+- is_paid
+- created_at
+
+payments
+- id
+- student_id (FK)
+- debt_id (FK)
+- amount_paid
+- transaction_id
+- payment_gateway (iyzico, stripe)
+- status (success, failed)
+- paid_at
+
+invoices
+- id
+- payment_id (FK)
+- invoice_no
+- pdf_path
+⚙️ Ek Özellikler (Opsiyonel)
+LDAP ile üniversite öğrenci bilgi sistemi entegrasyonu
+
+Kampüs içi kiosk terminal desteği
+
+QR kodla ödeme (mobil banka entegrasyonu)
+
+Webhook ile anlık ödeme geri dönüşü (Iyzico/Stripe)
+
+📌 Güvenlik & Yedekleme
+CSRF & XSS koruması (Laravel default)
+
+Günlük yedekleme (DB & Storage)
+
+3D Secure ödeme zorunluluğu
+
+Yönetici paneline IP kısıtlaması (opsiyonel)
+
+🚀 Geliştirme Aşamaları
+Kimlik Doğrulama Sistemi
+
+Öğrenci ve Yönetici Rolleri
+
+Borç Tanımlama Paneli
+
+Ödeme Gateway Entegrasyonu
+
+Makbuz & Fatura Sistemi
+
+Raporlama & Loglama
+
+Bildirimler
+
+Test & Deployment
+
+🧪 Test Senaryoları
+Başarılı ödeme -> borç kapatma -> makbuz oluşturulması
+
+Geçersiz kart -> hata mesajı
+
+Geç kalan ödeme -> uyarı sistemi
+
+Admin borç silme işlemi -> loglanması
