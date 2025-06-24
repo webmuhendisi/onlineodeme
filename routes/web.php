@@ -29,4 +29,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('students/{student}/debts/create', [DebtController::class, 'create'])->name('students.debts.create');
     Route::post('students/{student}/debts', [DebtController::class, 'store'])->name('students.debts.store');
     Route::delete('debts/{debt}', [DebtController::class, 'destroy'])->name('debts.destroy');
+
+    Route::get('settings', [\App\Http\Controllers\SettingController::class, 'edit'])->name('settings.edit');
+    Route::post('settings', [\App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');
+    Route::post('settings/sync', [\App\Http\Controllers\SettingController::class, 'sync'])->name('settings.sync');
 });

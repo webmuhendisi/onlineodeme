@@ -3,12 +3,13 @@ namespace App\Services;
 
 use App\Models\Payment;
 use Illuminate\Support\Facades\Http;
+use App\Models\Setting;
 
 class LogoAccountingService
 {
     public function sendPayment(Payment $payment): void
     {
-        $url = env('LOGO_API_URL');
+        $url = Setting::getValue('LOGO_API_URL', env('LOGO_API_URL'));
         if (!$url) {
             return;
         }
@@ -21,7 +22,10 @@ class LogoAccountingService
             'invoice_no' => $payment->invoice->invoice_no ?? null,
         ];
 
-        $client = Http::withBasicAuth(env('LOGO_CLIENT_ID'), env('LOGO_CLIENT_SECRET'));
+        $client = Http::withBasicAuth(
+            Setting::getValue('LOGO_CLIENT_ID', env('LOGO_CLIENT_ID')),
+            Setting::getValue('LOGO_CLIENT_SECRET', env('LOGO_CLIENT_SECRET'))
+        );
         $client->post($url . '/payments', $payload);
 
         if ($payment->invoice) {

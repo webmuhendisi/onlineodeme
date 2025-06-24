@@ -14,7 +14,7 @@ Authentication: Laravel Breeze / Jetstream
 Frontend Kütüphaneler: Bootstrap 5, FontAwesome, Alpine.js
 
 Admin Panel: Custom Blade
-Tüm arayüzler Bootstrap CDN üzerinden modern bir görünümle sunulur. Yönetim paneline `/admin` adresinden erişebilirsiniz.
+Tüm arayüzler Bootstrap CDN üzerinden modern bir görünümle sunulur. Yönetim paneline `/admin` adresinden erişebilirsiniz. Panelde Active Directory ve Logo muhasebe entegrasyon ayarlarını düzenleyebilir ve ödemeleri Logo ile senkronize edebilirsiniz.
 
 🎯 Amaç
 Öğrencilerin dönemlik harç, sınav, yurt, yemek veya diğer hizmet ücretlerini online olarak görüntüleyip ödemelerini sağlayan bir sistem oluşturmak.
@@ -199,6 +199,7 @@ Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe`, `isbank` veya `dumm
 Active Directory baglantisi icin `.env` dosyaniza `AD_HOST`, `AD_BASE_DN`, `AD_USERNAME` ve `AD_PASSWORD` degiskenlerini ekleyin. Sistem, kullanici bilgilerini otomatik olarak Active Directory'den cekebilir.
 
 Logo muhasebe entegrasyonu icin `LOGO_API_URL`, `LOGO_CLIENT_ID` ve `LOGO_CLIENT_SECRET` ayarlarinin doldurulmasi gerekir. Basarili odemeler sonrasinda olusan makbuz bilgileri bu API'ye otomatik gonderilir.
+Bu degiskenleri veritabaninda saklayabilir ve yönetim panelindeki **Sistem Ayarları** sayfasından guncelleyebilirsiniz. Aynı sayfadan Logo ile manuel senkronizasyon da baslatilabilir.
 
 ## Operasyon
 1. `php artisan migrate --force` komutunu kullanarak veritabani tablolarini olusturun.

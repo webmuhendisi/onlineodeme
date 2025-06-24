@@ -8,7 +8,10 @@
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ url('/admin') }}">Admin Panel</a>
-        <a class="nav-link text-white" href="{{ url('/') }}">Siteye Dön</a>
+        <div>
+            <a class="nav-link d-inline text-white" href="{{ route('admin.settings.edit') }}">Ayarlar</a>
+            <a class="nav-link d-inline text-white" href="{{ url('/') }}">Siteye Dön</a>
+        </div>
     </div>
 </nav>
 <div class="container py-4">
