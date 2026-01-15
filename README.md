@@ -1,4 +1,5 @@
 🎓 Üniversite Online Ödeme Sistemi - Teknik Dokümantasyon
+Bu depo, README'de belirtilen ozelliklere sahip Laravel tabanli online odeme sisteminin iskelet kodlarini icerir.
 🧩 Teknoloji Yığını
 Backend Framework: Laravel 10.x
 
@@ -13,6 +14,7 @@ Authentication: Laravel Breeze / Jetstream
 Frontend Kütüphaneler: Bootstrap 5, FontAwesome, Alpine.js
 
 Admin Panel: Custom Blade
+Tüm arayüzler Bootstrap CDN üzerinden modern bir görünümle sunulur. Yönetim paneline `/admin` adresinden erişebilirsiniz. Panelde Active Directory ve Logo muhasebe entegrasyon ayarlarını düzenleyebilir ve ödemeleri Logo ile senkronize edebilirsiniz.
 
 🎯 Amaç
 Öğrencilerin dönemlik harç, sınav, yurt, yemek veya diğer hizmet ücretlerini online olarak görüntüleyip ödemelerini sağlayan bir sistem oluşturmak.
@@ -24,6 +26,8 @@ Admin Panel: Custom Blade
 Öğrenci e-posta doğrulama
 
 Şifre sıfırlama
+
+Öğrenciler, üniversitenin Active Directory hesabına ait e-posta ve şifreleriyle `/login` sayfasından giriş yapabilir. Giriş sırasında bilgiler AD sunucusunda doğrulanır ve yerel kullanıcı kaydı otomatik oluşturulur.
 
 2FA opsiyonel
 
@@ -62,6 +66,8 @@ Laravel SnappyPDF veya DomPDF kullanılabilir
 
 5. 🧾 Borç Tanımlama ve Takip
 Admin panelinden dönemsel borç tanımı
+
+Borç eklerken taksit sayısı belirlenebilir
 
 Belirli öğrenciye / gruba borç ekleme
 
@@ -114,6 +120,8 @@ debts
 - student_id (FK)
 - type (harç, sınav vs)
 - amount
+- installment_count
+- installments_paid
 - due_date
 - is_paid
 - created_at
@@ -123,6 +131,7 @@ payments
 - student_id (FK)
 - debt_id (FK)
 - amount_paid
+- installment_no
 - transaction_id
 - payment_gateway (iyzico, stripe)
 - status (success, failed)
@@ -176,3 +185,32 @@ Geçersiz kart -> hata mesajı
 Geç kalan ödeme -> uyarı sistemi
 
 Admin borç silme işlemi -> loglanması
+
+## Kurulum
+1. Depoyu klonlayin ve `composer install` komutunu calistirin.
+2. `.env` dosyasini olusturmak icin `.env.example` kopyalayin.
+3. `php artisan key:generate` komutunu calistirin.
+4. Veritabani bilgilerini .env dosyasina girin ve `php artisan migrate` komutu ile tablolari olusturun.
+5. Gelistirme sunucusunu baslatmak icin `php artisan serve` komutunu kullanin.
+
+Bu proje ornek ve iskelet niteligindedir. Tum ozelliklerin gercek ortam icin gelistirilmesi gerekmektedir.
+Production icin `.env` dosyanizda `APP_ENV=production` ve `APP_DEBUG=false` degerlerini kullanin. `storage` klasorunun yazilabilir oldugundan emin olun ve `php artisan storage:link` komutunu calistirin.
+
+Odeme altyapisi icin `PAYMENT_GATEWAY` degiskenini `stripe`, `isbank` veya `dummy` olarak belirleyin. Stripe icin `STRIPE_SECRET`/`STRIPE_KEY`, Isbank icin `ISBANK_API_URL`, `ISBANK_CLIENT_ID` ve `ISBANK_CLIENT_SECRET` degerlerini doldurun. Faturalar DomPDF ile `storage/invoices` klasorune PDF olarak olusur. Tum odemelerde TL, USD, EUR ve GBP para birimleri secilebilir.
+
+Active Directory baglantisi icin `.env` dosyaniza `AD_HOST`, `AD_BASE_DN`, `AD_USERNAME` ve `AD_PASSWORD` degiskenlerini ekleyin. Sistem, kullanici bilgilerini otomatik olarak Active Directory'den cekebilir.
+Login islemleri de bu baglanti uzerinden gerceklesir; ogrenciler e-posta ve sifrelerini kullanarak kimlik dogrulamasindan gecebilir.
+
+Logo muhasebe entegrasyonu icin `LOGO_API_URL`, `LOGO_CLIENT_ID` ve `LOGO_CLIENT_SECRET` ayarlarinin doldurulmasi gerekir. Basarili odemeler sonrasinda olusan makbuz bilgileri bu API'ye otomatik gonderilir.
+Bu degiskenleri veritabaninda saklayabilir ve yönetim panelindeki **Sistem Ayarları** sayfasından guncelleyebilirsiniz. Aynı sayfadan Logo ile manuel senkronizasyon da baslatilabilir.
+
+## Operasyon
+1. `php artisan migrate --force` komutunu kullanarak veritabani tablolarini olusturun.
+2. Faturalarin uretilmesi ve Logo'ya gonderilmesi icin queue calistirmak gerekiyorsa `php artisan queue:work` komutunu arkaplanda calistirin.
+3. Tum odemeler yapildiktan hemen sonra Logo'ya ve fatura olusturma servisine gonderilir. Gerekiyorsa HTTP erisim izinlerini kontrol edin.
+
+## Guvenlik
+* Giris denemeleri IP basina 5 kez ile sinirlandirilmistir.
+* Tüm yonetim sayfalari sadece "admin" rolune sahip kullanicilar tarafindan erisilebilir.
+* Olusturulan faturalar `storage/app/invoices` dizininde saklanir ve dogrudan web uzerinden erisilemez.
+
